@@ -88,8 +88,14 @@ const usernameEl = document.querySelector("#username");
 const passwordEl = document.querySelector("#password");
 const submitBtnEl = document.querySelector("#submit");
 const rememberMeEl = document.querySelector("#ckb1");
+const forgotPasswordEl = document.querySelector("#forgotPassword");
 
-console.log(document.cookie);
+// Function to get a cookie value by name
+function getCookie(name) {
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) return parts.pop().split(";").shift();
+}
 
 async function handleSubmit(e) {
   e.preventDefault();
@@ -111,14 +117,14 @@ async function handleSubmit(e) {
   }
 
   // Password validation
-  //   const passwordRegex =
-  //     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%?&])[A-Za-z\d@$!%?&]*$/;
-  //   if (!passwordRegex.test(password)) {
-  //     alert(
-  //       "Password must be at least 8 characters long and include an uppercase letter, a lowercase letter, a digit, and a special character."
-  //     );
-  //     return;
-  //   }
+  const passwordRegex =
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%?&])[A-Za-z\d@$!%?&]*$/;
+  if (!passwordRegex.test(password)) {
+    alert(
+      "Password must be at least 8 characters long and include an uppercase letter, a lowercase letter, a digit, and a special character."
+    );
+    return;
+  }
 
   try {
     const response = await fetch(
@@ -144,26 +150,26 @@ async function handleSubmit(e) {
     console.log(data);
     alert(`Welcome ${data.username}, your account has been created!`);
 
-    // Store login state in local storage if rememberMe is checked
-    // if (rememberMe) {
-    //   localStorage.setItem("username", username);
-    // } else {
-    //   localStorage.removeItem("username");
-    // }
+    // Store login state in cookies if rememberMe is checked
+    if (rememberMe) {
+      document.cookie = `username=${username}; path=/; max-age=3600`;
+    } else {
+      document.cookie = `username=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT`;
+    }
 
-    // formEl.reset();
+    formEl.reset();
   } catch (error) {
     alert("An error occurred while creating your account. Please try again.");
     console.error(error);
   }
 }
 
-// On page load, auto-fill the form if username is stored
+submitBtnEl.addEventListener("click", handleSubmit);
+
+// Display username from cookies on page load
 document.addEventListener("DOMContentLoaded", () => {
-  const storedUsername = localStorage.getItem("username");
+  const storedUsername = getCookie("username");
   if (storedUsername) {
     usernameEl.value = storedUsername;
   }
 });
-
-submitBtnEl.addEventListener("click", handleSubmit);
