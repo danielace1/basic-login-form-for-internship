@@ -77,32 +77,29 @@ export const login = async (req, res, next) => {
   }
 };
 
-// change password
+// forgot password
 export const changePassword = async (req, res, next) => {
-  const oldPassword = req.body.oldPassword;
-  const newPassword = req.body.newPassword;
+  const { username, newPassword } = req.body;
 
   try {
-    if (!oldPassword || !newPassword) {
+    if (!username || !newPassword) {
       throw createHttpError(404, "Missing Params");
     }
 
-    const user = await UserModel.findById(req.session.userId).select(
-      "+password"
-    );
+    const user = await UserModel.findOne({ username }).select("+password");
 
-    const isMatch = await bcrypt.compare(oldPassword, user.password);
-
-    if (!isMatch) {
-      throw createHttpError(401, "Invalid password");
+    if (!user) {
+      throw createHttpError(404, "User not found");
     }
 
+    // Hash the new password
     const passwordHashed = await bcrypt.hash(newPassword, 10);
 
+    // Update the user's password
     user.password = passwordHashed;
     await user.save();
 
-    res.status(200).json(user);
+    res.status(200).json({ message: "Password updated successfully" });
   } catch (error) {
     next(error);
   }
