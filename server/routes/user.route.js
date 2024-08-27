@@ -16,7 +16,7 @@ router.post("/signup", signUp);
 
 router.post("/login", login);
 
-router.post("/change-password", requiresAuth, changePassword);
+router.post("/change-password", changePassword);
 
 router.post("/logout", logOut);
 
