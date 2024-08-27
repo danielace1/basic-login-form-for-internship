@@ -103,7 +103,7 @@ async function handleSubmit(e) {
     return;
   }
 
-  if (username.length < 3 || password.length < 8) {
+  if (username.length < 3) {
     alert(
       "Username should be at least 3 characters long and password should be at least 8 characters long."
     );
@@ -111,14 +111,14 @@ async function handleSubmit(e) {
   }
 
   // Password validation
-  const passwordRegex =
-    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%?&])[A-Za-z\d@$!%?&]*$/;
-  if (!passwordRegex.test(password)) {
-    alert(
-      "Password must be at least 8 characters long and include an uppercase letter, a lowercase letter, a digit, and a special character."
-    );
-    return;
-  }
+  //   const passwordRegex =
+  //     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%?&])[A-Za-z\d@$!%?&]*$/;
+  //   if (!passwordRegex.test(password)) {
+  //     alert(
+  //       "Password must be at least 8 characters long and include an uppercase letter, a lowercase letter, a digit, and a special character."
+  //     );
+  //     return;
+  //   }
 
   try {
     const response = await fetch(
