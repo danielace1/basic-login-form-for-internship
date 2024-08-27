@@ -110,15 +110,15 @@ async function handleSubmit(e) {
     return;
   }
 
-  //   Password validation
-  //   const passwordRegex =
-  //     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%?&])[A-Za-z\d@$!%?&]*$/;
-  //   if (!passwordRegex.test(password)) {
-  //     alert(
-  //       "Password must be at least 8 characters long and include an uppercase letter, a lowercase letter, a digit, and a special character."
-  //     );
-  //     return;
-  //   }
+  // Password validation
+  const passwordRegex =
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%?&])[A-Za-z\d@$!%?&]*$/;
+  if (!passwordRegex.test(password)) {
+    alert(
+      "Password must be at least 8 characters long and include an uppercase letter, a lowercase letter, a digit, and a special character."
+    );
+    return;
+  }
 
   try {
     const response = await fetch(

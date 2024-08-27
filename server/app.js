@@ -12,7 +12,10 @@ const app = express();
 
 app.use(
   cors({
-    origin: "https://basic-login-form-for-internship-client.vercel.app/",
+    origin: [
+      "https://basic-login-form-for-internship-client.vercel.app",
+      "http://127.0.0.1:5500", // ignore this
+    ],
     credentials: true,
   })
 );
