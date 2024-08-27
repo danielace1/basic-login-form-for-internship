@@ -10,7 +10,12 @@ import env from "./util/validateEnv.js";
 
 const app = express();
 
-app.use(cors());
+app.use(
+  cors({
+    origin: "https://basic-login-form-for-internship-client.vercel.app/",
+    credentials: true,
+  })
+);
 app.use(express.json());
 app.use(
   session({
