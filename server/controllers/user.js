@@ -2,15 +2,10 @@ import createHttpError from "http-errors";
 import bcrypt from "bcrypt";
 import UserModel from "../models/user.model.js";
 
+// get authenticated user
 export const getAuthenticatedUser = async (req, res, next) => {
-  const authenticatedUserId = req.session.userId;
-
   try {
-    if (!authenticatedUserId) {
-      throw createHttpError(401, "User not authenticated");
-    }
-
-    const user = await UserModel.findById(authenticatedUserId);
+    const user = await UserModel.findById(req.session.userId);
 
     res.status(200).json(user);
   } catch (error) {
@@ -18,6 +13,7 @@ export const getAuthenticatedUser = async (req, res, next) => {
   }
 };
 
+// signup
 export const signUp = async (req, res, next) => {
   const username = req.body.username;
   const passwordRaw = req.body.password;
@@ -50,6 +46,7 @@ export const signUp = async (req, res, next) => {
   }
 };
 
+// login
 export const login = async (req, res, next) => {
   const username = req.body.username;
   const password = req.body.password;
@@ -80,6 +77,38 @@ export const login = async (req, res, next) => {
   }
 };
 
+// change password
+export const changePassword = async (req, res, next) => {
+  const oldPassword = req.body.oldPassword;
+  const newPassword = req.body.newPassword;
+
+  try {
+    if (!oldPassword || !newPassword) {
+      throw createHttpError(404, "Missing Params");
+    }
+
+    const user = await UserModel.findById(req.session.userId).select(
+      "+password"
+    );
+
+    const isMatch = await bcrypt.compare(oldPassword, user.password);
+
+    if (!isMatch) {
+      throw createHttpError(401, "Invalid password");
+    }
+
+    const passwordHashed = await bcrypt.hash(newPassword, 10);
+
+    user.password = passwordHashed;
+    await user.save();
+
+    res.status(200).json(user);
+  } catch (error) {
+    next(error);
+  }
+};
+
+// logout
 export const logOut = async (req, res, next) => {
   req.session.destroy((err) => {
     if (err) {
