@@ -152,7 +152,7 @@ async function handleSubmit(e) {
 
     // Store login state in cookies if rememberMe is checked
     if (rememberMe) {
-      document.cookie = `username=${username}; path=/; max-age=3600`;
+      document.cookie = `username=${username}; path=/; max-age=3600; Secure; SameSite=Lax`;
     } else {
       document.cookie = `username=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT`;
     }
