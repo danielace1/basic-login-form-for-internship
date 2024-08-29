@@ -69,11 +69,12 @@ export const login = async (req, res, next) => {
       throw createHttpError(401, "Invalid credentials");
     }
 
+    req.session.userId = user._id;
+
     if (rememberMe) {
-      req.session.userId = user._id;
       req.session.cookie.maxAge = 1000 * 60 * 60; // 1 hour
     } else {
-      req.session.destroy();
+      req.session.cookie.maxAge = null;
     }
 
     res.status(201).json(user);
