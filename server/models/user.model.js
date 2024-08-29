@@ -16,6 +16,10 @@ const userSchema = new Schema(
       select: false,
       required: [true, "Password is required"],
     },
+    rememberMe: {
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: true }
 );

@@ -38,7 +38,7 @@ export const signUp = async (req, res, next) => {
       password: passwordHashed,
     });
 
-    req.session.userId = newUser._id;
+    // req.session.userId = newUser._id;
 
     res.status(201).json(newUser);
   } catch (error) {
@@ -48,8 +48,7 @@ export const signUp = async (req, res, next) => {
 
 // login
 export const login = async (req, res, next) => {
-  const username = req.body.username;
-  const password = req.body.password;
+  const { username, password, rememberMe } = req.body;
 
   try {
     if (!username || !password) {
@@ -70,7 +69,13 @@ export const login = async (req, res, next) => {
       throw createHttpError(401, "Invalid credentials");
     }
 
-    req.session.userId = user._id;
+    if (rememberMe) {
+      req.session.userId = user._id;
+      req.session.cookie.maxAge = 1000 * 60 * 60; // 1 hour
+    } else {
+      req.session.destroy();
+    }
+
     res.status(201).json(user);
   } catch (error) {
     next(error);
