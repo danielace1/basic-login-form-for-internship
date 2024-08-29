@@ -26,9 +26,10 @@ app.use(
     resave: false,
     saveUninitialized: false,
     cookie: {
-      maxAge: 60000 * 60 * 24, // 24 hours
       secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
+      httpOnly: true,
+      maxAge: 1000 * 60 * 60, // 1 hour
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
     },
     rolling: true,
     store: MongoStore.create({
