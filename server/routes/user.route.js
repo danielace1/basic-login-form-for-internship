@@ -10,7 +10,7 @@ import { requiresAuth } from "../middleware/auth.js";
 
 const router = express.Router();
 
-router.get("/", requiresAuth, getAuthenticatedUser);
+router.get("/me", requiresAuth, getAuthenticatedUser);
 
 router.post("/signup", signUp);
 
